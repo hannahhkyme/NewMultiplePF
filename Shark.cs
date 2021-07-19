@@ -25,7 +25,35 @@ namespace MultiplePF
             this.shark_list_y = new List<double>();
 
         }
-       
+        static public double angle_wrap(double ang)
+        {
+            if (-Math.PI <= ang & ang <= Math.PI)
+            {
+                return ang;
+            }
+            else if (ang > Math.PI)
+            {
+                ang -= 2 * Math.PI;
+                return angle_wrap(ang);
+            }
+            else
+            {
+                ang += 2 * Math.PI;
+                return angle_wrap(ang);
+            }
+        }
+        static public double velocity_wrap(double vel)
+        {
+            if (vel <= 2)
+            {
+                return vel;
+            }
+            else
+            {
+                vel += -2;
+                return velocity_wrap(vel);
+            }
+        }
         public void create_shark_list()
         {
             this.shark_list_x = new List<double>();
@@ -42,11 +70,11 @@ namespace MultiplePF
 
             // updates velocity of particles
             this.V += MyGlobals.random_num.NextDouble() * RANDOM_VELOCITY;
-            this.V = MyGlobals.velocity_wrap(this.V);
+            this.V = velocity_wrap(this.V);
 
             //change theta & pass through angle_wrap
             this.THETA += MyGlobals.random_num.NextDouble() * (2 * RANDOM_THETA) - RANDOM_THETA;
-            this.THETA = MyGlobals.angle_wrap(this.THETA);
+            this.THETA = angle_wrap(this.THETA);
 
             // change x & y coordinates to match
             this.X += this.V * Math.Cos(this.THETA);

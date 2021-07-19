@@ -21,15 +21,43 @@ namespace MultiplePF
             this.INITIAL_PARTICLE_RANGE = 150;
             this.X = MyGlobals.random_num.Next(-INITIAL_PARTICLE_RANGE, INITIAL_PARTICLE_RANGE);
             this.Y = MyGlobals.random_num.Next(-INITIAL_PARTICLE_RANGE, INITIAL_PARTICLE_RANGE);
-            //this.X = 120;
-            //this.Y = 0;
+            //this.X = 45;
+            //this.Y = 45;
             this.Z = MyGlobals.random_num.Next(-INITIAL_PARTICLE_RANGE, INITIAL_PARTICLE_RANGE);
             this.V = MyGlobals.random_num.Next(0, 5);
             this.THETA = MyGlobals.random_num.NextDouble() * (2 * Math.PI) + -Math.PI;
             //this.THETA = Math.PI/3;
             this.W = 0.01;
         }
-
+        static public double angle_wrap(double ang)
+        {
+            if (-Math.PI <= ang & ang <= Math.PI)
+            {
+                return ang;
+            }
+            else if (ang > Math.PI)
+            {
+                ang -= 2 * Math.PI;
+                return angle_wrap(ang);
+            }
+            else
+            {
+                ang += 2 * Math.PI;
+                return angle_wrap(ang);
+            }
+        }
+        static public double velocity_wrap(double vel)
+        {
+            if (vel <= 2)
+            {
+                return vel;
+            }
+            else
+            {
+                vel += -2;
+                return velocity_wrap(vel);
+            }
+        }
 
         public void updateParticles()
         {
@@ -43,17 +71,18 @@ namespace MultiplePF
             double RANDOM_THETA = Math.PI / 2;
 
             // updates velocity of particles
+            
             this.V += MyGlobals.random_num.NextDouble()* RANDOM_VELOCITY;
-            this.V = MyGlobals.velocity_wrap(this.V);
-
+            this.V = velocity_wrap(this.V);
+            
             //change theta & pass throughMyGlobals.angle_wrap
             this.THETA += MyGlobals.random_num.NextDouble() * (2 * RANDOM_THETA) - RANDOM_THETA;
-            this.THETA = MyGlobals.angle_wrap(this.THETA);
-
+            this.THETA = angle_wrap(this.THETA);
+            
             // change x & y coordinates to match
             this.X += this.V * Math.Cos(this.THETA);
             this.Y += this.V * Math.Sin(this.THETA);
-
+            
         }
 
 
@@ -88,6 +117,14 @@ namespace MultiplePF
             double dRange2 = Math.Pow(particle_range2 - real_range2, 2);
             double function_range2 = .001 + Math.Pow(E, -dRange2 / DENOMINATOR2);
             this.W *= function_range2;
+            /*
+            Console.WriteLine("drange2");
+            Console.WriteLine(dRange2);
+            Console.WriteLine("function range 2");
+            Console.WriteLine(function_range2);
+            Console.WriteLine("weight");
+            Console.WriteLine(this.W);
+            */
         }
         public Particle DeepCopy()
         {
@@ -104,42 +141,42 @@ namespace MultiplePF
         }
     }
 
-public static class MyGlobals
-    
-{
-    public static Random random_num = new Random();
-    public static List<Robot> robot_list = new  List<Robot>();
-    public static Shark s1 = new Shark();
-    public static List<Shark> shark_list = new List<Shark>();
-    
-    static public double angle_wrap(double ang)
+    public static class MyGlobals
+
     {
-        if (-Math.PI <= ang & ang <= Math.PI)
+        public static Random random_num = new Random();
+        public static List<Robot> robot_list = new List<Robot>();
+        public static Shark s1 = new Shark();
+        public static List<Shark> shark_list = new List<Shark>();
+        static public double angle_wrap(double ang)
         {
-            return ang;
+            if (-Math.PI <= ang & ang <= Math.PI)
+            {
+                return ang;
+            }
+            else if (ang > Math.PI)
+            {
+                ang -= 2 * Math.PI;
+                return angle_wrap(ang);
+            }
+            else
+            {
+                ang += 2 * Math.PI;
+                return angle_wrap(ang);
+            }
         }
-        else if (ang > Math.PI)
+        static public double velocity_wrap(double vel)
         {
-            ang -= 2 * Math.PI;
-            return angle_wrap(ang);
-        }
-        else
-        {
-            ang += 2 * Math.PI;
-            return angle_wrap(ang);
+            if (vel <= 2)
+            {
+                return vel;
+            }
+            else
+            {
+                vel += -2;
+                return velocity_wrap(vel);
+            }
         }
     }
-    static public double velocity_wrap(double vel)
-    {
-        if (vel <= 2)
-        {
-            return vel;
-        }
-        else
-        {
-            vel += -2;
-            return velocity_wrap(vel);
-        }
-    }
-}
+    
 }

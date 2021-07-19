@@ -23,7 +23,7 @@ namespace MultiplePF
         public ParticleFilter()
         {
             this.Current_Time = 0;
-            this.NUMBER_OF_PARTICLES = 2;
+            this.NUMBER_OF_PARTICLES = 1000;
             this.r1 = new Robot();
             this.w1_list_x = new List<double>();
             this.w2_list_x = new List<double>();
@@ -38,24 +38,25 @@ namespace MultiplePF
     
     public void create()
     {
-           /* 
+           
             for (int i = 0; i < NUMBER_OF_PARTICLES; ++i)
             {
                 particleList.Add(new Particle());
             }
-            */
-            
+           /* 
+           
             Particle particle1 = new Particle();
             particle1.X = 45;
             particle1.Y = 45;
             particleList.Add(particle1);
+           
             
             Particle particle2 = new Particle();
             particle2.X = 0;
             particle2.Y = 0;
             
             particleList.Add(particle2);
-            /*
+            
             Particle particle3 = new Particle();
             particle3.Y = -100;
             particle3.X = -100;
@@ -80,6 +81,7 @@ namespace MultiplePF
 
             List<double> particle_range_list = new List<double>();
             List<double> particle_range_list2 = new List<double>();
+            List<double> weight_list = new List<double>();
             for (int i = 0; i < NUMBER_OF_PARTICLES; ++i)
             {
                 double particle_range = particleList[i].calc_particle_range(MyGlobals.robot_list[0]);
@@ -87,52 +89,25 @@ namespace MultiplePF
                 particle_range_list.Add(particle_range);
                 particle_range_list2.Add(particle_range2);
                 particleList[i].weight(real_range_list[0], particle_range_list[i], real_range_list[1], particle_range_list2[i]);// real_range_list
+                weight_list.Add(particleList[i].W);
                 // real_range_list = [[range1], [range1]]
-                // weight:
-                //          
+                // weight:       
             }
-            // for robots
+            //this.normalize(weight_list);
 
         }
-        public List<double> normalize(List<List<double>> weight_list)
+        public void normalize(List<double> weight_list)
     {
-        // for each list of weights in weight_list, normalize them individually
-        List<List<double>> individual_normalized_list = new List<List<double>>();
-        for (int i = 0; i < weight_list.Count; ++i)
+        
+        double max_denominator = weight_list.Max();
+        
+        for(int k =0; k< NUMBER_OF_PARTICLES; ++k)
         {
-            double denominator = weight_list[i].Max();
-            List<double> current_weight_list = weight_list[i];
-            List<double> first_normalized_list = new List<double>();
-            for (int j = 0; j < weight_list[i].Count; ++j)
-            {
-                current_weight_list[j] = (1 / denominator) * current_weight_list[j];
-
-                first_normalized_list.Add(current_weight_list[j]);
-            }
-            individual_normalized_list.Add(first_normalized_list);
-
+               particleList[k].W = (1 / max_denominator) * particleList[k].W;
+               
+               
         }
-        // adds the normalized weights of weight_list to the final list
-        List<double> added_list = new List<double>();
-        for(int k =0; k< individual_normalized_list[0].Count; ++k)
-        {
-                double new_weight = 0;
-                for (int j = 0; j< individual_normalized_list.Count; ++j)
-                {
-                    new_weight += individual_normalized_list[j][k];
-                }
-                added_list.Add(new_weight);
-        }
-        // normalize the added list now
-        double final_denominator = added_list.Max();
-        List<double> normalized_list = new List<double>();
-        for (int j = 0; j < added_list.Count; ++j)
-        {
-            added_list[j] = (1 / final_denominator) * added_list[j];
 
-            normalized_list.Add(added_list[j]);
-        }
-        return normalized_list;
     }
     public void correct()
     {

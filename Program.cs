@@ -50,7 +50,7 @@ namespace MultiplePF
             robot1.Y = 0;
             robot1.X = 45;
             Robot robot2 = new Robot();
-            robot2.X = 100;
+            robot2.X = -100;
             robot2.Y = 45;
             MyGlobals.robot_list.Add(robot1);
             MyGlobals.robot_list.Add(robot2);
@@ -64,31 +64,68 @@ namespace MultiplePF
             main.update_real_range_list();
             particle_filter.update_weights(main.real_range_list);
 
-            /*while (true)
+            Console.WriteLine("weight1");
+            Console.WriteLine(particle_filter.particleList[0].W);
+            Console.WriteLine("weight2");
+            Console.WriteLine(particle_filter.particleList[1].W);
+
+            Console.WriteLine("new particle1 x");
+            Console.WriteLine(particle_filter.particleList[0].X);
+            Console.WriteLine("new particle1 y");
+            Console.WriteLine(particle_filter.particleList[0].Y);
+
+            Console.WriteLine("new particle2 x");
+            Console.WriteLine(particle_filter.particleList[1].X);
+            Console.WriteLine("new particle2 y");
+            Console.WriteLine(particle_filter.particleList[1].Y);
+            double count = 0;
+            while (true)
             {
+                count += 1;
                 //update Shark //update shark list
-                //MyGlobals.shark_list[0].update_shark();
+                MyGlobals.shark_list[0].update_shark();
                 //update Robot // update robot list
                 //main.update_robot_list();
                 //update real_range_list
                 main.update_real_range_list();
 
-                
                 //update PF
                 particle_filter.update();
-
                 particle_filter.update_weights(main.real_range_list);
                 particle_filter.correct();
-                
+                Console.WriteLine("real shark x");
+                Console.WriteLine(MyGlobals.shark_list[0].X);
+                Console.WriteLine("real shark y");
+                Console.WriteLine(MyGlobals.shark_list[0].Y);
                 List<double> predict_shark_location = new List<double>();
                 predict_shark_location = particle_filter.predicting_shark_location();
-
+                Console.WriteLine("predicted shark x");
+                Console.WriteLine(predict_shark_location[0]);
+                Console.WriteLine("predicted shark y");
+                Console.WriteLine(predict_shark_location[1]);
                 Console.WriteLine("range error");
                 Console.WriteLine(main.calc_range_error(predict_shark_location));
-                
-                
+                /*
+                Console.WriteLine("weight1");
+                Console.WriteLine(particle_filter.particleList[0].W);
+                Console.WriteLine("weight2");
+                Console.WriteLine(particle_filter.particleList[1].W);
+                Console.WriteLine("new particle1 x");
+                Console.WriteLine(particle_filter.particleList[0].X);
+                Console.WriteLine("new particle1 y");
+                Console.WriteLine(particle_filter.particleList[0].Y);
+
+                Console.WriteLine("new particle2 x");
+                Console.WriteLine(particle_filter.particleList[1].X);
+                Console.WriteLine("new particle2 y");
+                Console.WriteLine(particle_filter.particleList[1].Y);
+                */
+
+
+
+
             }
-            */
+            
             // calculate new weight without the bearings
 
         }
