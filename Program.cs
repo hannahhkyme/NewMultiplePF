@@ -28,6 +28,14 @@ namespace MultiplePF
                 MyGlobals.robot_list[i].update_robot_position();
             }
         }
+
+        public double calc_range_error(List<double> predict_shark_location)
+        {
+            double x_component = Math.Pow((MyGlobals.s1.X - predict_shark_location[0]), 2);
+            double y_component = Math.Pow((MyGlobals.s1.Y - predict_shark_location[1]), 2);
+            double range_error = Math.Sqrt(x_component + y_component);
+            return range_error;
+        }
         public static void Main(string[] args)
         {
             // create Main Class
@@ -39,27 +47,48 @@ namespace MultiplePF
             // create Robots
 
             Robot robot1 = new Robot();
+            robot1.Y = 0;
+            robot1.X = 45;
             Robot robot2 = new Robot();
+            robot2.X = 100;
+            robot2.Y = 45;
             MyGlobals.robot_list.Add(robot1);
             MyGlobals.robot_list.Add(robot2);
             // [Robot1, Robot2]
-
             // create PF
+            // for all robots:
             ParticleFilter particle_filter = new ParticleFilter();
-            particle_filter.create(); 
+            particle_filter.create();
             // create particleList
-           
-           
-            //while True:
-            //update Shark //update shark list
-            MyGlobals.shark_list[0].update_shark();
-            //update Robot // update robot list
-            main.update_robot_list();
-            //update real_range_list
-            main.update_real_range_list();
 
-            //update PF
-            // weight(real_range_list)
+            main.update_real_range_list();
+            particle_filter.update_weights(main.real_range_list);
+
+            /*while (true)
+            {
+                //update Shark //update shark list
+                //MyGlobals.shark_list[0].update_shark();
+                //update Robot // update robot list
+                //main.update_robot_list();
+                //update real_range_list
+                main.update_real_range_list();
+
+                
+                //update PF
+                particle_filter.update();
+
+                particle_filter.update_weights(main.real_range_list);
+                particle_filter.correct();
+                
+                List<double> predict_shark_location = new List<double>();
+                predict_shark_location = particle_filter.predicting_shark_location();
+
+                Console.WriteLine("range error");
+                Console.WriteLine(main.calc_range_error(predict_shark_location));
+                
+                
+            }
+            */
             // calculate new weight without the bearings
 
         }

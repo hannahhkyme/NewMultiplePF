@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MultiplePF
 {
-    internal class Particle
+    public class Particle
     {
        
         // SETS TYPE OF MEMBER VARIABLE
@@ -74,7 +74,7 @@ namespace MultiplePF
             return particleRange;
         }
 
-        public void weight(double real_range1, double particle_range1,double real_range2, double particle_range2) //real_range_list
+        public void weight(double real_range1, double particle_range1, double real_range2, double particle_range2 ) //real_range_list
         {
             /* calculates the weight according to alpha, then the weight according
              * they are multiplied together to get the final weight */
@@ -85,13 +85,9 @@ namespace MultiplePF
             double dRange = Math.Pow(particle_range1 - real_range1, 2);
             double function_range1 = .001 + Math.Pow(E, -dRange / DENOMINATOR2);
             this.W = function_range1;
-
             double dRange2 = Math.Pow(particle_range2 - real_range2, 2);
             double function_range2 = .001 + Math.Pow(E, -dRange2 / DENOMINATOR2);
-
             this.W *= function_range2;
-            
-
         }
         public Particle DeepCopy()
         {
@@ -106,47 +102,6 @@ namespace MultiplePF
             return temp;
 
         }
-
-
-        /*
-            static void Main(string[] args)
-            {
-                Particle little_particle = new Particle();
-
-                //Testing Update Particles
-
-
-                Console.WriteLine(little_particle.X_P);
-                Console.WriteLine(little_particle.Y_P);
-                little_particle.updateParticles(1.0);
-                Console.WriteLine(little_particle.X_P);
-                Console.WriteLine(little_particle.Y_P);
-
-
-                //Testing Calc Particle Alpha
-
-
-                little_particle.THETA = 6.28;
-                little_particle.angle_wrap(little_particle.THETA);
-                Console.WriteLine("theta p");
-                Console.WriteLine(little_particle.THETA);
-
-                //Console.WriteLine(little_particle.calc_particle_range(5, 5.5));
-                double particle_range = little_particle.calc_particle_range(5, 5.5);
-                Console.WriteLine("particle_range");
-                Console.WriteLine(particle_range);
-                Console.WriteLine("particle_alpha");
-                //Console.WriteLine(little_particle.calc_particle_alpha(5,5.5,Math.PI));
-                double particle_alpha = little_particle.calc_particle_alpha(5, 5.5, Math.PI);
-                Console.WriteLine(particle_alpha);
-                Console.WriteLine("Weight before");
-                Console.WriteLine(little_particle.W);
-                little_particle.weight(1.57, particle_alpha, 8.0, particle_range);
-                Console.WriteLine("Weight After");
-                Console.WriteLine(little_particle.W);
-
-            }
-        */
     }
 
 public static class MyGlobals
